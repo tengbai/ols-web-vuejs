@@ -1,17 +1,17 @@
 <template>
   <div>
-    <el-form :model="training" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
+    <el-form :model="training" :rules="rules" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
       <el-form-item
         label="名称"
         prop="title"
       >
-        <el-input v-model.number="training.title" autocomplete="off"></el-input>
+        <el-input v-model="training.title" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item
         label="描述"
         prop="description"
       >
-        <el-input v-model.number="training.description" autocomplete="off"></el-input>
+        <el-input type="textarea" v-model="training.description" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">提交</el-button>
@@ -24,12 +24,42 @@
 <script>
 export default {
   data() {
+    const validateTitle = (rule, value, callback) => {
+      if (!/^[\u4e00-\u9fa5a-zA-Z0-9]+$/.test(value)) {
+        return callback('名称不得包含特殊字符')
+      }
+
+      if (value.length > 15) {
+        return callback('名称不得多于15个字符')
+      }
+
+      callback()
+    }
+
+    const validateDescription = (rule, value, callback) => {
+      if (value.length > 300) {
+        return callback('描述信息不得多于300个字符')
+      }
+
+      callback()
+    }
+
     return {
       training: {
         title: '',
         description: ''
+      },
+      rules: {
+        title: [
+          { required: true, message: '请填写特训营名称', trigger: 'blur' },
+          { validator: validateTitle, trigger: 'blur' }
+        ],
+        description: [
+          { required: true, message: '请填写描述信息', trigger: 'blur' },
+          { validator: validateDescription, trigger: 'blur' }
+        ]
       }
-    };
+    }
   },
   methods: {
     onSubmit(formName) {
