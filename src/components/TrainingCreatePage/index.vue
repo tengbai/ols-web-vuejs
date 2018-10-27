@@ -67,12 +67,15 @@ export default {
     onSubmit() {
       this.$refs['trainingForm'].validate(valid => {
         if (valid) {
-          service.createTraining(this.training).then(() => {
-            this.$router.push('/training/list')
+          service.createTraining(this.training).then(({ status, data }) => {
+            if (data.code === 200) {
+              this.$router.push('/training/list')
+            } else if (data.code === 400) {
+              this.$message.error('名称重复');
+            } else {
+              this.$message.error('网络异常，请稍后再试');
+            }
           })
-        } else {
-          console.log("error submit!!");
-          return false;
         }
       })
     },
