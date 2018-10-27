@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import SignIn from '@/components/SignIn'
 import SignUp from '@/components/SignUp'
-import CreateTrainingPage from '@/components/CreateTrainingPage'
+import TrainingCreatePage from '@/components/TrainingCreatePage'
+import TrainingListPage from '@/components/TrainingListPage'
 
 Vue.use(Router)
 
@@ -21,7 +22,12 @@ export default new Router({
     {
       path: '/training/create',
       name: 'training.create',
-      component: CreateTrainingPage
+      component: TrainingCreatePage
+    },
+    {
+      path: '/training/list',
+      name: 'training.list',
+      component: TrainingListPage
     }
   ]
 })
