@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="training" :rules="rules" ref="numberValidateForm" label-width="100px" class="demo-ruleForm">
+    <el-form :model="training" :rules="rules" ref="trainingForm" label-width="100px" class="demo-ruleForm">
       <el-form-item
         label="名称"
         prop="title"
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import service from '@/api'
+
 export default {
   data() {
     const validateTitle = (rule, value, callback) => {
@@ -62,18 +64,20 @@ export default {
     }
   },
   methods: {
-    onSubmit(formName) {
-      this.$refs[formName].validate(valid => {
+    onSubmit() {
+      this.$refs['trainingForm'].validate(valid => {
         if (valid) {
-          alert("submit!");
+          service.createTraining(this.training).then(() => {
+            this.$router.push('/training/list')
+          })
         } else {
           console.log("error submit!!");
           return false;
         }
       })
     },
-    onCancel(formName) {
-      this.$refs[formName].resetFields();
+    onCancel() {
+      this.$router.push('/training/list')
     }
   }
 };
