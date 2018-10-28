@@ -14,7 +14,7 @@
         <el-input type="textarea" v-model="training.description" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">提交</el-button>
+        <el-button type="primary" @click="onSubmit" :loading="isLoading">提交</el-button>
         <el-button @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>
@@ -47,6 +47,7 @@ export default {
     }
 
     return {
+      isLoading: false,
       training: {
         title: '',
         description: ''
@@ -67,7 +68,9 @@ export default {
     onSubmit() {
       this.$refs['trainingForm'].validate(valid => {
         if (valid) {
+          this.isLoading = true
           service.createTraining(this.training).then(({ status, data }) => {
+            this.isLoading = false
             if (data.code === 200) {
               this.$message.success('保存成功');
               this.$router.push('/training/list')
@@ -76,6 +79,8 @@ export default {
             } else {
               this.$message.error('网络异常，请稍后再试');
             }
+          }).catch(() => {
+            this.isLoading = false
           })
         }
       })
