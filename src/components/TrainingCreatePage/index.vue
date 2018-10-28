@@ -69,6 +69,7 @@ export default {
         if (valid) {
           service.createTraining(this.training).then(({ status, data }) => {
             if (data.code === 200) {
+              this.$message.success('保存成功');
               this.$router.push('/training/list')
             } else if (data.code === 400) {
               this.$message.error('名称重复');
